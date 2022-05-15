@@ -32,9 +32,9 @@ public class ApplicationServlet extends SlingSafeMethodsServlet {
 
     @Override
     protected void doGet(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
-        Long customerId = Long.parseLong(request.getParameter(ApiConstants.REQUEST_PARAM_CUSTOMER_ID));
-        String company = request.getParameter(ApiConstants.REQUEST_PARAM_COMPANY);
         try{
+            Long customerId = Long.parseLong(request.getParameter(ApiConstants.REQUEST_PARAM_CUSTOMER_ID));
+            String company = request.getParameter(ApiConstants.REQUEST_PARAM_COMPANY);
             Customer customer = applicationService.findCustomerById(customerId, company);
             response.getOutputStream().print(generateHTMLTemplates.generateCustomerHtmlTemplate(customer));
             response.setCharacterEncoding(Charset.defaultCharset().displayName());
