@@ -32,6 +32,7 @@ and handling an error when a customer is not find for a given id.
  The ApiLayer should consist only of ApiLogic so only the Request Parametars are being collected in this method, communication with the service layer bellow 
  and generating the response for the sent parameters accordingly.
   - Added GenerationHTML class which is responsible for buidling the HTML Template Responses using String Format insted of String Replacements.
+  - Added the parsing logic of the customerId request parameter in the try section, to be able to display the ERROR_HTML when an invalid format od the id is sent
 
 ### Changes in the Testing Part
 
