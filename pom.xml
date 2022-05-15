@@ -13,6 +13,7 @@
         <module>ApplicationServiceApi</module>
         <module>ApplicationServiceImpl</module>
         <module>MockConstants</module>
+        <module>improved-mock-constants</module>
     </modules>
     <dependencyManagement>
         <dependencies>
@@ -49,6 +50,11 @@
             <dependency>
                 <groupId>ch.codeflair.application</groupId>
                 <artifactId>application-mock-constants</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.codeflair.application</groupId>
+                <artifactId>improved-mock-constants</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
