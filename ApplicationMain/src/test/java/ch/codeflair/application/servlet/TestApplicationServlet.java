@@ -1,6 +1,9 @@
 package ch.codeflair.application.servlet;
 
 import ch.codeflair.application.mock.MockConstants;
+import ch.codeflair.application.service.ImprovedApplicationServiceImpl;
+import ch.codeflair.application.service.domain.Customer;
+import ch.codeflair.application.service.exceptions.CustomerNotFoundException;
 import ch.codeflair.application.service.impl.ApplicationServiceImpl;
 import org.apache.commons.lang.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -24,31 +27,44 @@ import java.lang.reflect.Field;
 @RunWith(MockitoJUnitRunner.class)
 public class TestApplicationServlet {
 
-
-    private static final String CUSTOMER_ID_001 = "001";
-    private static final String COMPANY_NAME = "Codeflair";
-
-    private static final String EXPECTED_RESPONSE =
-            "<div class='customerdata'>" +
-                    "<h1>Sehr geehrter Your Name</h1>" +
-                    "<div class='text'>Danke dass Sie sich bei " + COMPANY_NAME + " beworben haben!</div>" +
-                    "</div>";
-
     @Mock
     SlingHttpServletRequest request;
     @Mock
-    ApplicationServiceImpl applicationService;
+    ImprovedApplicationServiceImpl applicationService;
 
     @Test
     public void testDoGet() throws ServletException, IOException, NoSuchFieldException, IllegalAccessException, ApplicationServiceException {
-        Mockito.when(request.getParameter(ApplicationServlet.REQUEST_PARAM_CUSTOMER_ID)).thenReturn(CUSTOMER_ID_001);
-        Mockito.when(request.getParameter(ApplicationServlet.REQUEST_PARAM_COMPANY)).thenReturn(COMPANY_NAME);
+        Mockito.when(request.getParameter(ApiConstants.REQUEST_PARAM_CUSTOMER_ID))
+                .thenReturn(TestApiConstants.CUSTOMER_ID_001.toString());
+        Mockito.when(request.getParameter(ApiConstants.REQUEST_PARAM_COMPANY))
+                .thenReturn(TestApiConstants.COMPANY_NAME);
         ApplicationServlet servlet = new ApplicationServlet();
-        Mockito.when(applicationService.getCustomerData(CUSTOMER_ID_001)).thenReturn(MockConstants.CUSTOMER_DATA_1);
+        Mockito.when(applicationService.
+                findCustomerById(TestApiConstants.CUSTOMER_ID_001, TestApiConstants.COMPANY_NAME))
+                .thenReturn(TestApiConstants.customer);
         setField(servlet, "applicationService", applicationService);
         MockSlingHttpServletResponse mockResponse = new MockSlingHttpServletResponse();
         servlet.doGet(request, mockResponse);
-        Assert.assertTrue(StringUtils.equals(mockResponse.getOutputAsString(), EXPECTED_RESPONSE));
+        Assert.assertTrue(StringUtils.equals(mockResponse.getOutputAsString(), TestApiConstants.EXPECTED_RESPONSE));
+        Assert.assertTrue(mockResponse.getStatus() == 200);
+    }
+
+    @Test
+    public void testDoGetCustomerError() throws ServletException, IOException, NoSuchFieldException, IllegalAccessException, ApplicationServiceException {
+        Mockito.when(request.getParameter(ApiConstants.REQUEST_PARAM_CUSTOMER_ID))
+                .thenReturn(TestApiConstants.NON_EXISTENT_CUSTOMER.toString());
+        Mockito.when(request.getParameter(ApiConstants.REQUEST_PARAM_COMPANY))
+                .thenReturn(TestApiConstants.COMPANY_NAME);
+        ApplicationServlet servlet = new ApplicationServlet();
+        Mockito.when(applicationService.
+                        findCustomerById(TestApiConstants.NON_EXISTENT_CUSTOMER, TestApiConstants.COMPANY_NAME))
+                .thenThrow(
+                        new CustomerNotFoundException(String.format("Customer with id=%s does not exist",
+                                TestApiConstants.NON_EXISTENT_CUSTOMER)));
+        setField(servlet, "applicationService", applicationService);
+        MockSlingHttpServletResponse mockResponse = new MockSlingHttpServletResponse();
+        servlet.doGet(request, mockResponse);
+        Assert.assertTrue(StringUtils.equals(mockResponse.getOutputAsString(), TestApiConstants.EXPECTED_ERROR_RESPONSE));
         Assert.assertTrue(mockResponse.getStatus() == 200);
     }
 

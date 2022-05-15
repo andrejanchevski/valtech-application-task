@@ -4,7 +4,7 @@ import ch.codeflair.application.service.domain.Customer;
 
 import java.util.List;
 
-public interface ApplicationService {
+public interface ImprovedApplicationService {
 
     Customer findCustomerById(Long customerId, String companyName);
     List<Customer> findAllCustomers();

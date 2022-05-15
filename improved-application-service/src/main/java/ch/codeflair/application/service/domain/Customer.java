@@ -17,6 +17,22 @@ public class Customer {
         this.company = company;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

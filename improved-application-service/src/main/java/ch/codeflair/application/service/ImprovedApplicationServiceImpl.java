@@ -10,7 +10,7 @@ import org.apache.felix.scr.annotations.Reference;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ApplicationServiceImpl implements ApplicationService {
+public class ImprovedApplicationServiceImpl implements ImprovedApplicationService {
 
 
     @Reference

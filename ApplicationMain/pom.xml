@@ -29,6 +29,10 @@
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.scr.annotations</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ch.codeflair.application</groupId>
+            <artifactId>improved-application-service</artifactId>
+        </dependency>
 
         <!-- Testing -->
         <dependency>
